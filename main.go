@@ -3,6 +3,7 @@ package main
 import (
 	"coffeeintocode/search-engine/db"
 	"coffeeintocode/search-engine/routes"
+	"coffeeintocode/search-engine/utils"
 	"fmt"
 	"log"
 	"os"
@@ -34,7 +35,7 @@ func main() {
 	app.Use(compress.New())
 	db.InitDB()
 	routes.SetRoutes(app)
-
+	utils.StartCronJobs()
 	// Start our server and listen for a shutdown
 	go func() {
 		if err := app.Listen(port); err != nil {
