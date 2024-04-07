@@ -6,6 +6,7 @@ import (
 	"coffeeintocode/search-engine/views"
 	"fmt"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -19,21 +20,47 @@ type AdminClaims struct {
 }
 
 func DashboardHandler(c *fiber.Ctx) error {
-	return render(c, views.Home())
+	settings := &db.SearchSettings{}
+	err := settings.Get()
+	if err != nil {
+		c.Status(500)
+		return c.SendString("<h2>Error: Something went wrong</h2>")
+	}
+	amount := strconv.FormatUint(uint64(settings.Amount), 10)
+	return render(c, views.Home(amount, settings.SearchOn, settings.AddNew))
 }
 
 type settingsform struct {
-	Amount   int  `form:"amount"`
-	SearchOn bool `form:"searchOn"`
-	AddNew   bool `form:"addNew"`
+	Amount   uint   `form:"amount"`
+	SearchOn string `form:"searchOn"`
+	AddNew   string `form:"addNew"`
 }
 
 func DashboardPostHandler(c *fiber.Ctx) error {
 	input := settingsform{}
 	if err := c.BodyParser(&input); err != nil {
+		c.Status(500)
 		return c.SendString("<h2>Error: Something went wrong</h2>")
 	}
-	fmt.Println(input)
+	// Convert checkbox 'on' values to boolean
+	addNew := false
+	if input.AddNew == "on" {
+		addNew = true
+	}
+	searchOn := false
+	if input.SearchOn == "on" {
+		searchOn = true
+	}
+	settings := &db.SearchSettings{}
+	settings.Amount = input.Amount
+	settings.SearchOn = searchOn
+	settings.AddNew = addNew
+	err := settings.Update()
+	if err != nil {
+		fmt.Println(err)
+		return c.SendString("<h2>Error: Something went wrong</h2>")
+	}
+	c.Append("HX-Refresh", "true")
 	return c.SendStatus(200)
 }
 
