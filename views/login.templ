@@ -2,11 +2,12 @@ package views
 
 templ Login() {
 	@template() {
-		<div class="flex justify-center items-center">
+		<div hx-ext="response-targets" class="flex justify-center items-center">
 			<form
 				class="flex flex-col justify-center items-center gap-5 py-5"
 				hx-post="/login"
 				hx-target="#feedback"
+				hx-target-error="#feedback"
 				hx-indicator="#indicator"
 			>
 				<label class="input input-bordered flex items-center gap-2 w-full">

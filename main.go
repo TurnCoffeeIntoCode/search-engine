@@ -1,6 +1,7 @@
 package main
 
 import (
+	"coffeeintocode/search-engine/db"
 	"coffeeintocode/search-engine/routes"
 	"fmt"
 	"log"
@@ -31,7 +32,7 @@ func main() {
 	})
 
 	app.Use(compress.New())
-
+	db.InitDB()
 	routes.SetRoutes(app)
 
 	// Start our server and listen for a shutdown

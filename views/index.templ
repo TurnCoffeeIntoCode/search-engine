@@ -9,6 +9,7 @@ templ template() {
 			<link href="https://cdn.jsdelivr.net/npm/daisyui@4.9.0/dist/full.min.css" rel="stylesheet" type="text/css"/>
 			<script src="https://cdn.tailwindcss.com"></script>
 			<script src="https://unpkg.com/htmx.org@1.9.11" integrity="sha384-0gxUXCCR8yv9FM2b+U3FDbsKthCI66oH5IA9fHppQq9DDMHuMauqq1ZHBpJxQ0J0" crossorigin="anonymous"></script>
+			<script src="https://unpkg.com/htmx.org@1.9.11/dist/ext/response-targets.js"></script>
 		</head>
 		<body>
 			{ children... }
@@ -20,6 +21,9 @@ templ Home() {
 	@template() {
 		<div class="flex flex-col justify-center items-center">
 			<h1 class="text-2xl py-5 text-center">Welcome to Search Setting</h1>
+			<div class="py-5">
+				<button hx-post="/logout" class="btn">Logout</button>
+			</div>
 			<form
 				class="flex flex-col justify-center items-center gap-5 py-5"
 				hx-post="/"
