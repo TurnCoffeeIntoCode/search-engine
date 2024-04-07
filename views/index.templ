@@ -9,6 +9,7 @@ templ template() {
 			<link href="https://cdn.jsdelivr.net/npm/daisyui@4.9.0/dist/full.min.css" rel="stylesheet" type="text/css"/>
 			<script src="https://cdn.tailwindcss.com"></script>
 			<script src="https://unpkg.com/htmx.org@1.9.11" integrity="sha384-0gxUXCCR8yv9FM2b+U3FDbsKthCI66oH5IA9fHppQq9DDMHuMauqq1ZHBpJxQ0J0" crossorigin="anonymous"></script>
+			<script src="https://unpkg.com/htmx.org@1.9.11/dist/ext/response-targets.js"></script>
 		</head>
 		<body>
 			{ children... }
@@ -16,31 +17,35 @@ templ template() {
 	</html>
 }
 
-templ Home() {
+templ Home(amount string, searchOn bool, addNew bool) {
 	@template() {
-		<div class="flex flex-col justify-center items-center">
+		<div hx-ext="response-targets" class="flex flex-col justify-center items-center">
 			<h1 class="text-2xl py-5 text-center">Welcome to Search Setting</h1>
+			<div class="py-5">
+				<button hx-post="/logout" class="btn">Logout</button>
+			</div>
 			<form
 				class="flex flex-col justify-center items-center gap-5 py-5"
 				hx-post="/"
 				hx-target="#feedback"
+				hx-target-error="#feedback"
 				hx-indicator="#indicator"
 			>
 				<label class="input input-bordered flex items-center gap-2 w-full">
 					Urls per hour:
-					<input type="text" class="grow" name="amount" placeholder="5"/>
+					<input value={ amount } type="text" class="grow" name="amount" placeholder="5"/>
 				</label>
 				<div class="flex flex-col">
 					<div class="form-control w-52">
 						<label class="cursor-pointer label">
 							<span class="label-text">Search On:</span>
-							<input type="checkbox" class="toggle toggle-primary" name="searchOn" checked/>
+							<input type="checkbox" class="toggle toggle-primary" name="searchOn" checked?={ searchOn }/>
 						</label>
 					</div>
 					<div class="form-control w-52">
 						<label class="cursor-pointer label">
 							<span class="label-text">Add new urls:</span>
-							<input type="checkbox" class="toggle toggle-secondary" name="addNew" checked/>
+							<input type="checkbox" class="toggle toggle-secondary" name="addNew" checked?={ addNew }/>
 						</label>
 					</div>
 				</div>
