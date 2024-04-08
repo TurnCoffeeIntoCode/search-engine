@@ -18,6 +18,7 @@ func SetRoutes(app *fiber.App) {
 	app.Get("/login", LoginHandler)
 	app.Post("/login", LoginPostHandler)
 	app.Post("/logout", LogoutHandler)
+	app.Post("/search", HandleSearch)
 	// app.Get("/create", func(c *fiber.Ctx) error {
 	// 	u := &db.User{}
 	// 	u.CreateAdmin()
